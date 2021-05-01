@@ -4,9 +4,12 @@ import csv
 
 class Write:
 
+    path = ""
+
     def __init__(self, path):
         # crea il file se non esiste e lo apre inizializzando i campi
-        with open(path + "\data.csv", 'w', newline='') as file:
+        self.path = path
+        with open(self.path + "\data.csv", 'w', newline='') as file:
 
             header = ["ID", "Partita", "Quota", "Punteggio al 75'", "Punteggio Finale"]
             writer = csv.writer(file, delimiter=',')
