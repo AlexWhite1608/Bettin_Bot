@@ -15,3 +15,6 @@ class Write:
             # usa per scrivere riga, come parametri prende i dettagli della scommessa
             # writer.writerow()
 
+    # metodo che scrive i dettagli della scommessa su file. Prende in input l'istanza della classe Bet
+    def write(self, Bet):
+        pass
