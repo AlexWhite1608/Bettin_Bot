@@ -2,7 +2,12 @@ from selenium.common.exceptions import NoSuchElementException
 from setup import *
 import time
 
+###### VARIABILI #####
+
 min_minute = 75
+min_odd = 1.05
+
+######################
 
 
 def setup_bet():
@@ -78,7 +83,44 @@ def find_result_75():
 
     return list_result_75
 
+def find_odds():
+    list_odds = []
+    try:
+        container_leghe = setup_bet()
+        for container_lega in container_leghe:
 
+            # Trova le singole partite in una certa lega
+            singole_partite = container_lega.find_elements_by_class_name(
+                'container-fluid.noPadLeftRight.overflowHidden.ng-scope.rowColored')
 
+            for singola_partita in singole_partite:
 
+                # Trova le squadre in base alla condizione del tempo
+                tempo = singola_partita.find_element_by_class_name('minutesWatchLivePage')
+                if tempo.text != '' and tempo.text != '-':
+                    if int(tempo.text) >= min_minute:
 
+                        # Trova tutte e tre le quote
+                        odds = singola_partita.find_elements_by_class_name(
+                            'oddsLive.ng-binding')
+
+                        # Confronta il risultato per evitare i pareggi
+                        risultato_casa = singola_partita.find_element_by_class_name(
+                            'homeTeamScoreLivePage').text
+                        risultato_trasferta = singola_partita.find_element_by_class_name(
+                            'awayTeamScoreLivePage').text
+                        if int(risultato_casa) != int(risultato_trasferta):
+
+                            # Ciclo per convertire in float e trovare la quota minima (maggiore di min_odd)
+                            for odd in odds:
+                                m_list = []  # lista di appoggio per convertire in float
+                                if odd.text != '':
+                                    odd = odd.text.replace(',', '.')
+                                    m_list.append(float(odd))
+                                    if float(odd) >= min_odd:
+                                        list_odds.append(min(m_list))  # FIXME: probabile che non funzioni il min
+                                    else:
+                                        list_odds.append('Quota troppo bassa!')
+    except NoSuchElementException:
+        print("Errore")
+    return list_odds
