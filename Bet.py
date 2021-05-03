@@ -65,13 +65,20 @@ def find_result_75():
                 tempo = singola_partita.find_element_by_class_name('minutesWatchLivePage')
                 if tempo.text != '' and tempo.text != '-':
                     if int(tempo.text) >= min_minute:
-                        risultato = singola_partita.find_element_by_class_name(
-                            'scoreMatchLivePage.heightRowMatchLive.ng-scope')
-                        risultato = risultato.text.replace('\n', '-')
-                        list_result_75.append(risultato)
+
+                        # Confronta il risultato per evitare i pareggi
+                        risultato_casa = singola_partita.find_element_by_class_name(
+                            'homeTeamScoreLivePage').text
+                        risultato_trasferta = singola_partita.find_element_by_class_name('awayTeamScoreLivePage').text
+                        if int(risultato_casa) != int(risultato_trasferta):
+                            risultato = risultato_casa + "-" + risultato_trasferta
+                            list_result_75.append(risultato)
     except NoSuchElementException:
         print("Errore")
 
     return list_result_75
+
+
+
 
 
