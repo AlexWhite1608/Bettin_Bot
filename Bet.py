@@ -100,9 +100,11 @@ def find_odds():
                 if tempo.text != '' and tempo.text != '-':
                     if int(tempo.text) >= min_minute:
 
-                        # Trova tutte e tre le quote
+                        # Trova il container delle tre le quote per ogni parita
                         odds_container = singola_partita.find_element_by_class_name(
                             'betWrappper.heightRowMatchLive.displayBlock')
+
+                        # Trova un singola quota nella partita
                         odds = odds_container.find_elements_by_class_name('oddsLive.ng-binding')
 
                         # Confronta il risultato per evitare i pareggi
@@ -113,16 +115,15 @@ def find_odds():
                         if int(risultato_casa) != int(risultato_trasferta):
 
                             # Ciclo per convertire in float e trovare la quota minima (maggiore di min_odd)
+                            m_list = []  # lista di appoggio per convertire in float
                             for odd in odds:
-                                m_list = []  # lista di appoggio per convertire in float
                                 if odd.text != '':
                                     odd = odd.text.replace(',', '.')
                                     m_list.append(float(odd))
-                            for odd in m_list:
-                                if float(odd) >= min_odd:
-                                    list_odds.append(min(m_list))  # FIXME: probabile che non funzioni il min
-                                else:
-                                    list_odds.append('Quota troppo bassa!')
+                                    if float(odd) >= min_odd and len(m_list) == 3:
+                                        list_odds.append(min(m_list))  # FIXME: probabile che non funzioni il min
+                                    elif float(odd) < min_odd:
+                                        list_odds.append('Quota troppo bassa!')
     except NoSuchElementException:
         print("Errore")
     return list_odds
