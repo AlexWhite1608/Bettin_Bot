@@ -4,7 +4,7 @@ import time
 
 ###### VARIABILI #####
 
-min_minute = 75
+min_minute = 0
 min_odd = 1.05
 
 ######################
@@ -101,8 +101,9 @@ def find_odds():
                     if int(tempo.text) >= min_minute:
 
                         # Trova tutte e tre le quote
-                        odds = singola_partita.find_elements_by_class_name(
-                            'oddsLive.ng-binding')
+                        odds_container = singola_partita.find_element_by_class_name(
+                            'betWrappper.heightRowMatchLive.displayBlock')
+                        odds = odds_container.find_elements_by_class_name('oddsLive.ng-binding')
 
                         # Confronta il risultato per evitare i pareggi
                         risultato_casa = singola_partita.find_element_by_class_name(
@@ -117,10 +118,11 @@ def find_odds():
                                 if odd.text != '':
                                     odd = odd.text.replace(',', '.')
                                     m_list.append(float(odd))
-                                    if float(odd) >= min_odd:
-                                        list_odds.append(min(m_list))  # FIXME: probabile che non funzioni il min
-                                    else:
-                                        list_odds.append('Quota troppo bassa!')
+                            for odd in m_list:
+                                if float(odd) >= min_odd:
+                                    list_odds.append(min(m_list))  # FIXME: probabile che non funzioni il min
+                                else:
+                                    list_odds.append('Quota troppo bassa!')
     except NoSuchElementException:
         print("Errore")
     return list_odds
