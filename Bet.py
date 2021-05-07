@@ -22,9 +22,11 @@ class Bet:
             container_chiuso.click()
             time.sleep(0.1)
 
+        # Trova il container generale in cui sono presenti tutte le leghe in cui ci sono le partite
         time.sleep(1)
         container_generale = driver.find_element_by_xpath('//*[@id="contentLivePage"]/div')
-        time.sleep(1)
+
+        # Trova tutti i container delle leghe
         Bet.container_leghe = container_generale.find_elements_by_class_name('leagueWrapperLive.ng-scope')
 
     def open_match(self):
@@ -33,9 +35,12 @@ class Bet:
         for lega in Bet.container_leghe:
             matches = lega.find_elements_by_class_name(
                 'row.noMargin')
+
+            # Trova singole parite presenti nella lega
             for container_partita in matches:
                 match = container_partita.find_element_by_class_name('homeAwayTeamsLivePage.capitalize.ng-binding')
 
+                # Verifica tempo di gioco e apre parite in un altro tab
                 time_match = container_partita.find_element_by_class_name('minutesWatchLivePage')
                 if time_match.text != '-' and time_match.text != '' and int(time_match.text) >= min_minute:
                     match_url = match.get_attribute('href')
@@ -45,3 +50,6 @@ class Bet:
                     time.sleep(2)
                     driver.close()
                     driver.switch_to.window(driver.window_handles[0])
+
+    # Trova le due squadre che giocano
+    def find_teams(self):
