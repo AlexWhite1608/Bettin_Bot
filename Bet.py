@@ -1,4 +1,4 @@
-from selenium.common.exceptions import NoSuchElementException
+
 from setup import *
 import time
 
@@ -6,6 +6,7 @@ import time
 
 min_minute = 40
 min_odd = 1.05
+
 
 ######################
 
@@ -44,12 +45,20 @@ class Bet:
                 time_match = container_partita.find_element_by_class_name('minutesWatchLivePage')
                 if time_match.text != '-' and time_match.text != '' and int(time_match.text) >= min_minute:
                     match_url = match.get_attribute('href')
-                    driver.execute_script("window.open('');")
-                    driver.switch_to.window(driver.window_handles[1])
-                    driver.get(match_url)
+                    self.open_tab(match_url)
+
                     time.sleep(2)
                     driver.close()
                     driver.switch_to.window(driver.window_handles[0])
 
     # Trova le due squadre che giocano
     def find_teams(self):
+        teams = driver.find_element_by_id('headAvvName').text
+        return teams
+
+    # Metodo che apre la partita in un nuovo tab
+    def open_tab(self, matchUrl):
+        driver.execute_script("window.open('');")
+        driver.switch_to.window(driver.window_handles[1])
+        driver.get(matchUrl)
+
