@@ -8,6 +8,7 @@ driver.find_element_by_xpath('//*[@id="cookie-panel"]/div/div/span[2]/span/butto
 
 # esegue login
 # Login()
-print(find_match())
-print(find_result_75())
-print(find_odds())
+
+bet = Bet()
+
+bet.open_match()
