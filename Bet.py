@@ -1,10 +1,13 @@
 
 from setup import *
 import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 ###### VARIABILI #####
 
-min_minute = 40
+min_minute = 65
 min_odd = 1.05
 
 
@@ -45,6 +48,7 @@ class Bet:
                 time_match = container_partita.find_element_by_class_name('minutesWatchLivePage')
                 if time_match.text != '-' and time_match.text != '' and int(time_match.text) >= min_minute:
                     match_url = match.get_attribute('href')
+
                     self.open_tab(match_url)
 
                     time.sleep(2)
