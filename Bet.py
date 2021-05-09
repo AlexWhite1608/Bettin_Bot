@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 
 ###### VARIABILI #####
 
-min_minute = 65
+min_minute = 60
 min_odd = 1.05
 
 
