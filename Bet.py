@@ -19,6 +19,8 @@ class Bet:
 
     # Nel costruttore si individua il container di tutte le partite disponibili attualmente
     def __init__(self):
+        WebDriverWait(driver, 5).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "accordionLeague.collapsed")))
 
         # Apri tutte le leghe disponibili
         container_chiusi = driver.find_elements_by_class_name('accordionLeague.collapsed')
@@ -66,3 +68,17 @@ class Bet:
         driver.switch_to.window(driver.window_handles[1])
         driver.get(matchUrl)
 
+    # Metodo per trovare la quota più bassa
+    def find_odds(self):
+        try:
+            odds = []
+            odds.append(float(driver.find_element_by_xpath(
+                '//*[@id="quoteLive"]/div[2]/table[1]/tbody/tr[1]/td[1]/div/div/div[2]/span').text.replace(',', '.')))
+            odds.append(float(driver.find_element_by_xpath(
+                '//*[@id="quoteLive"]/div[2]/table[1]/tbody/tr[1]/td[2]/div/div/div[2]/span').text.replace(',', '.')))
+            odds.append(float(driver.find_element_by_xpath(
+                '//*[@id="quoteLive"]/div[2]/table[1]/tbody/tr[1]/td[3]/div/div/div[2]/span').text.replace(',', '.')))
+            odd = min(odds)
+            return odd
+        except NoSuchElementException:
+            return 'Quota non disponibile'
