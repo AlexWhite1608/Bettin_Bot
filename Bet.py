@@ -7,20 +7,19 @@ from selenium.webdriver.common.by import By
 
 ###### VARIABILI #####
 
-min_minute = 60
+min_minute = 50
 min_odd = 1.05
 
 
 ######################
 
 class Bet:
-
     container_leghe = []
 
     # Nel costruttore si individua il container di tutte le partite disponibili attualmente
     def __init__(self):
-        WebDriverWait(driver, 5).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, "accordionLeague.collapsed")))
+        # WebDriverWait(driver, 5).until(
+        # EC.presence_of_element_located((By.CLASS_NAME, 'accordionLeague.collapsed')))
 
         # Apri tutte le leghe disponibili
         container_chiusi = driver.find_elements_by_class_name('accordionLeague.collapsed')
@@ -82,3 +81,5 @@ class Bet:
             return odd
         except NoSuchElementException:
             return 'Quota non disponibile'
+        except ValueError:
+            return 'Quota troppo bassa'
